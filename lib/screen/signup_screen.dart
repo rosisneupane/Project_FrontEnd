@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:new_ui/screen/assesment_screen.dart';
+import 'package:new_ui/screen/signin_screen.dart';
 import 'package:new_ui/widgets/rounded_button.dart';
 
 class SignUp extends StatefulWidget {
@@ -169,47 +171,52 @@ class _SignUpState extends State<SignUp> {
                 RoundedButton(
                   label: 'Sign Up',
                   onPressed: () {
-                    // Your sign-in logic here
-                    print("Sign In clicked");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AssessmentScreen()),
+                          );
                   },
                 ),
                 SizedBox(
                   height: 16,
                 ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 8,
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Already have an account? ',
-                            style: TextStyle(
-                              color: const Color(0xFF736A66),
-                              fontSize: 14,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: -0.03,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'Sign In.',
-                            style: TextStyle(
-                              color: const Color(0xFFEC7D1C),
-                              fontSize: 14,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: -0.03,
-                            ),
-                          ),
-                        ],
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Already have an account? ',
+                        style: TextStyle(
+                          color: const Color(0xFF736A66),
+                          fontSize: 14,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.03,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignIn()),
+                          );
+                        },
+                        child: Text(
+                          'Sign In.',
+                          style: TextStyle(
+                            color: const Color(0xFFEC7D1C),
+                            fontSize: 14,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.03,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),

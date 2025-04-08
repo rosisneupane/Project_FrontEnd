@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:new_ui/screen/age_screen.dart';
 import 'package:new_ui/widgets/rounded_button.dart';
 import '../theme/colors.dart';
 import '../theme/text_styles.dart';
@@ -202,7 +203,11 @@ class _GenderScreenState extends State<GenderScreen> {
                       const SizedBox(height: 48),
                       RoundedButton(
                         onPressed: () {
-                          // Handle continue action here
+                                                  Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AgeScreen()),
+                          );
                         },
                         label: 'Continue',
                       ),

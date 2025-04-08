@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:new_ui/screen/medication_screen.dart';
 import 'package:new_ui/widgets/rounded_button.dart';
 import '../theme/colors.dart';
 import '../theme/text_styles.dart';
@@ -71,7 +72,11 @@ class _PhysicalDestressScreenState extends State<PhysicalDestressScreen> {
                       const SizedBox(height: 48),
                       RoundedButton(
                         onPressed: () {
-                          // TODO: Handle continue with selected age
+                                                   Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MedicationScreen()),
+                          );
                         },
                         label: 'Continue',
                         // Optionally, add semanticLabel if you have voice accessibility in mind

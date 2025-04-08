@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_ui/screen/gender_screen.dart';
 import 'package:new_ui/widgets/assesment_option.dart';
 import 'package:new_ui/widgets/rounded_button.dart';
 import '../theme/colors.dart';
@@ -96,7 +97,11 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                       const SizedBox(height: 48),
                       RoundedButton(
                         onPressed: () {
-                          // Handle continue action here
+                                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const GenderScreen()),
+                          );
                         },
                         label: 'Continue',
                       ),

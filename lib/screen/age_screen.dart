@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_ui/screen/weight_screen.dart';
 import 'package:new_ui/widgets/rounded_button.dart';
 import '../theme/colors.dart';
 import '../theme/text_styles.dart';
@@ -148,8 +149,11 @@ class _AgeScreenState extends State<AgeScreen> {
                       const SizedBox(height: 48),
                       RoundedButton(
                         onPressed: () {
-                          // TODO: Handle continue with selected age
-                          print("Selected Age: $selected");
+                         Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const WeightScreen()),
+                          );
                         },
                         label: 'Continue',
                         // Optionally, add semanticLabel if you have voice accessibility in mind

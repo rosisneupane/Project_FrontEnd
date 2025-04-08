@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:new_ui/screen/assesment_screen.dart';
+import 'package:new_ui/screen/signup_screen.dart';
 import 'package:new_ui/widgets/rounded_button.dart';
 
 class SignIn extends StatefulWidget {
@@ -130,59 +132,66 @@ class _SignInState extends State<SignIn> {
                 RoundedButton(
                   label: 'Sign In',
                   onPressed: () {
-                    // Your sign-in logic here
-                    print("Sign In clicked");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AssessmentScreen()),
+                    );
                   },
                 ),
                 SizedBox(
                   height: 16,
                 ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 8,
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Don’t have an account? ',
-                            style: TextStyle(
-                              color: const Color(0xFF736A66),
-                              fontSize: 14,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: -0.03,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'Sign Up.',
-                            style: TextStyle(
-                              color: const Color(0xFFEC7D1C),
-                              fontSize: 14,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: -0.03,
-                            ),
-                          ),
-                        ],
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don’t have an account?',
+                        style: TextStyle(
+                          color: const Color(0xFF736A66),
+                          fontSize: 14,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.03,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      'Forgot Password',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xFFEC7D1C),
-                        fontSize: 14,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.03,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignUp()),
+                          );
+                        },
+                        child: Text(
+                          ' Sign Up.',
+                          style: TextStyle(
+                            color: const Color(0xFFEC7D1C),
+                            fontSize: 14,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.03,
+                          ),
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Text(
+                    'Forgot Password',
+                    style: TextStyle(
+                      color: const Color(0xFFEC7D1C),
+                      fontSize: 14,
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.03,
                     ),
-                  ],
-                )
+                  ),
+                ),
               ],
             ),
           ),

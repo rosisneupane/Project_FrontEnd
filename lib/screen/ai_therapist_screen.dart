@@ -12,8 +12,6 @@ class AiTherapistScreen extends StatefulWidget {
 }
 
 class _AiTherapistScreenState extends State<AiTherapistScreen> {
-
-
   final List<Map<String, String>> interactionModes = [
     {
       'label': 'You: Speech\n AI: Speech',
@@ -46,22 +44,23 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
               margin: const EdgeInsets.only(top: 16),
               child: Row(
                 children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.primary),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.chevron_left),
-                      color: AppColors.primary,
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ),
+                  // Container(
+                  //   width: 48,
+                  //   height: 48,
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     border: Border.all(color: AppColors.primary),
+                  //   ),
+                  //   child: IconButton(
+                  //     icon: const Icon(Icons.chevron_left),
+                  //     color: AppColors.primary,
+                  //     onPressed: () => Navigator.pop(context),
+                  //   ),
+                  // ),
                   const SizedBox(width: 12),
                   const Expanded(
-                    child: Text('AI Therapist Chat', style: AppTextStyles.title),
+                    child:
+                        Text('AI Therapist Chat', style: AppTextStyles.title),
                   ),
                   Container(
                     padding:
@@ -70,7 +69,8 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
                       color: const Color(0xFF7D944D),
                       borderRadius: BorderRadius.circular(32),
                     ),
-                    child: const Text('Network OK', style: AppTextStyles.button),
+                    child:
+                        const Text('Network OK', style: AppTextStyles.button),
                   ),
                 ],
               ),
@@ -92,12 +92,12 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
                         return InteractionOption(
                           label: interactionModes[index]['label']!,
                           imagePath: interactionModes[index]['image']!,
-                          
                           onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const ChatPage()),
-      );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ChatPage()),
+                            );
                           },
                         );
                       }),
@@ -123,7 +123,6 @@ class InteractionOption extends StatelessWidget {
     super.key,
     required this.label,
     required this.imagePath,
-
     required this.onTap,
   });
 
@@ -138,7 +137,7 @@ class InteractionOption extends StatelessWidget {
           height: 110,
           decoration: BoxDecoration(
             border: Border.all(
-              color:  Colors.black,
+              color: Colors.black,
               width: 2.0,
             ),
             borderRadius: BorderRadius.circular(32),

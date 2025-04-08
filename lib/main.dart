@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:new_ui/screen/ai_therapist_screen.dart';
+import 'package:new_ui/screen/analytics_screen.dart';
 import 'package:new_ui/screen/home_screen.dart';
+import 'package:new_ui/screen/resources_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +25,7 @@ class SimpleBottomNav extends StatefulWidget {
 }
 
 class _SimpleBottomNavState extends State<SimpleBottomNav> {
-  int _selectedIndex = 0; // default selected index
+  int _selectedIndex = 1; // default selected index
 
   final List<IconData> _icons = [
     Icons.sentiment_satisfied,
@@ -35,10 +37,10 @@ class _SimpleBottomNavState extends State<SimpleBottomNav> {
 
   final List<Widget> _pages = [
     HomeScreen(),
-    Center(child: Text('Favorites Page', style: TextStyle(fontSize: 24))),
+    AnalyticsScreen(),
     AiTherapistScreen(),
-    Center(child: Text('Backpack Page', style: TextStyle(fontSize: 24))),
-    Center(child: Text('Goals Page', style: TextStyle(fontSize: 24))),
+    ResourcesScreen(),
+    Center(child: Text('Setting Page', style: TextStyle(fontSize: 24))),
   ];
 
   void _onTap(int index) {

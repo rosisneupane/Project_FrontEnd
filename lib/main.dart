@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_ui/screen/medication_screen.dart';
-import 'package:new_ui/screen/stress_screen.dart';
-
+import 'package:new_ui/screen/ai_therapist_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -18,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const StressScreen(),
+      home: const AiTherapistScreen(),
     );
   }
 }

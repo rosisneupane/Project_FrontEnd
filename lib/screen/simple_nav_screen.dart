@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_ui/screen/ai_therapist_screen.dart';
 import 'package:new_ui/screen/analytics_screen.dart';
+import 'package:new_ui/screen/forumentry_screen.dart';
 import 'package:new_ui/screen/home_screen.dart';
 import 'package:new_ui/screen/resources_screen.dart';
 
@@ -27,7 +28,7 @@ class _SimpleBottomNavState extends State<SimpleBottomNav> {
     AnalyticsScreen(),
     AiTherapistScreen(),
     ResourcesScreen(),
-    Center(child: Text('Setting Page', style: TextStyle(fontSize: 24))),
+    ForumEntryScreen(),
   ];
 
   void _onTap(int index) {

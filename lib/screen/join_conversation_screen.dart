@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:new_ui/config.dart';
+import 'package:new_ui/screen/forum_message_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class JoinConversationScreen extends StatefulWidget {
@@ -61,10 +62,39 @@ class _JoinConversationScreenState extends State<JoinConversationScreen> {
     }
   }
 
-  void _joinConversation(Map<String, dynamic> convo) {
+  void _joinConversation(String conversationId) async{
     // Handle join logic here, e.g., call an API or navigate
-    print("Joining conversation: ${convo['name']}");
+    print("Joining conversation: $conversationId");
     // Example: Navigator.pushNamed(context, '/chat', arguments: convo);
+        String url = AppConfig.apiUrl;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+
+    if (token == null) {
+      throw Exception('JWT Token not found');
+    }
+
+    try {
+      final response = await http.post(Uri.parse('$url/conversations/join'),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({"conversation_id": conversationId}));
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ForumMessagesScreen(
+                    conversationId: conversationId,
+                  )),
+        );
+      } else {
+        throw Exception("Failed to join conversations");
+      }
+    } catch (e) {
+      print("Error fetching conversations: $e");
+    }
   }
 
   @override
@@ -114,7 +144,7 @@ class _JoinConversationScreenState extends State<JoinConversationScreen> {
                                     ),
                                     ElevatedButton(
                                       onPressed: () =>
-                                          _joinConversation(convo),
+                                          _joinConversation(convo["id"]),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
                                             const Color(0xFF9BB067),

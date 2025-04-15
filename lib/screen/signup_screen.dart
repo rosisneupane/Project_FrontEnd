@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:new_ui/config.dart';
-import 'package:new_ui/screen/assesment_screen.dart';
 import 'package:new_ui/screen/otp_screen.dart';
 import 'package:new_ui/screen/signin_screen.dart';
 import 'package:new_ui/widgets/rounded_button.dart';
@@ -45,13 +44,13 @@ class _SignUpState extends State<SignUp> {
   Future<void> _registerUser() async {
     final String url = AppConfig.apiUrl;
 
-    final String _username = _usernameController.text.trim();
-    final String _email = _emailController.text.trim();
-    final String _password = _passwordController.text.trim();
-    final String _guardianEmail = _guardianEmailController.text.trim();
-    final String _guardianPhone = _guardianPhoneController.text.trim();
+    final String username = _usernameController.text.trim();
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+    final String guardianEmail = _guardianEmailController.text.trim();
+    final String guardianPhone = _guardianPhoneController.text.trim();
 
-    if (_password != _confirmPasswordController.text.trim()) {
+    if (password != _confirmPasswordController.text.trim()) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -70,12 +69,12 @@ class _SignUpState extends State<SignUp> {
         Uri.parse('$url/auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          'username': _username,
-          'email': _email,
-          'password': _password,
-          'guardianEmail': _guardianEmail,
-          'guardianPhone': _guardianPhone,
-        }),
+          'username': username,
+          'email': email,
+          'password': password,
+          'guardianEmail': guardianEmail,
+          'guardianPhone': guardianPhone,
+        })
       );
 
       if (!mounted) return;
@@ -88,7 +87,7 @@ class _SignUpState extends State<SignUp> {
         );
 Navigator.pushReplacement(
   context,
-  MaterialPageRoute(builder: (context) => OTPScreen(email: _email)),
+  MaterialPageRoute(builder: (context) => OTPScreen(email: email)),
 );
 
       } else {

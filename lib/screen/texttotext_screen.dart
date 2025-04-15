@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:intl/intl.dart';
 
-// Fake UserBasic class
 class UserBasic {
   final String id;
   final String username;
@@ -11,7 +9,7 @@ class UserBasic {
   UserBasic({required this.id, required this.username, required this.email});
 }
 
-// Message model
+
 class MessageResponse {
   final String id;
   final String conversationId;

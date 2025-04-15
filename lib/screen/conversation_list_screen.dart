@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:new_ui/config.dart';
+import 'package:new_ui/screen/forum_message_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConversationListScreen extends StatefulWidget {
@@ -83,33 +84,45 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
                       itemCount: _conversations.length,
                       itemBuilder: (context, index) {
                         final convo = _conversations[index];
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          margin: const EdgeInsets.only(bottom: 16),
-                          elevation: 3,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  convo['name'] ?? 'Unnamed',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForumMessagesScreen(
+                                  conversationId: convo['id'],
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  convo['details'] ?? '',
-                                  style: const TextStyle(
-                                    color: Colors.black87,
+                              ),
+                            );
+                          },
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            margin: const EdgeInsets.only(bottom: 16),
+                            elevation: 3,
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    convo['name'] ?? 'Unnamed',
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    convo['details'] ?? '',
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );

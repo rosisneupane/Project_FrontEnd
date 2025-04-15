@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:new_ui/config.dart';
 import 'package:new_ui/model/schedule.dart';
 import 'package:new_ui/screen/createschedule_screen.dart';
+import 'package:new_ui/widgets/drawer_widget.dart';
 import 'package:new_ui/widgets/home_top_bar.dart';
 import 'package:new_ui/widgets/mood_selector.dart';
 import 'package:new_ui/widgets/schedule_card.dart';
@@ -19,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   List<ScheduleItem> scheduleData = [];
   bool isLoading = true;
 
@@ -68,11 +71,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: DrawerWidget(),
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            HomeTopBar(),
+            HomeTopBar(
+              onProfileTap: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+            ),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),

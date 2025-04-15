@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:new_ui/screen/medication_screen.dart';
 import 'package:new_ui/widgets/rounded_button.dart';
 import '../theme/colors.dart';

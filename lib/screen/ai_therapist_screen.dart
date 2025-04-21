@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:new_ui/screen/texttotext_screen.dart';
+import 'package:new_ui/config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/colors.dart';
 import '../theme/text_styles.dart';
+import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 class AiTherapistScreen extends StatefulWidget {
   const AiTherapistScreen({super.key});
@@ -12,162 +15,300 @@ class AiTherapistScreen extends StatefulWidget {
 }
 
 class _AiTherapistScreenState extends State<AiTherapistScreen> {
-  final List<Map<String, String>> interactionModes = [
-    {
-      'label': 'You: Speech\n AI: Speech',
-      'image': 'assets/images/ManSpeech.svg',
-    },
-    {
-      'label': 'You: Speech\n AI: Text',
-      'image': 'assets/images/ManSpeechTwo.svg',
-    },
-    {
-      'label': 'You: Text\n AI: Text',
-      'image': 'assets/images/RobotText.svg',
-    },
-    {
-      'label': 'You: Text\n AI: Speech',
-      'image': 'assets/images/RobotTextTwo.svg',
-    },
-  ];
+  String url = AppConfig.apiUrl;
+  String? _conversationId;
+  final TextEditingController _inputController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  List<Map<String, dynamic>> _messages = [];
+  List<Map<String, dynamic>> _conversations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchConversations();
+  }
+
+  void _fetchConversations() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+      if (token == null) throw Exception('JWT Token not found');
+
+      final response =
+          await http.get(Uri.parse('$url/aiconversations/'), headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      });
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          _conversations =
+              data.map((item) => item as Map<String, dynamic>).toList();
+        });
+      } else {
+        throw Exception('Failed to start conversation');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to fetch conversations.")),
+      );
+    }
+  }
+
+  void _fetchMessages() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+      if (token == null) throw Exception('JWT Token not found');
+
+      final response = await http.get(
+          Uri.parse('$url/aiconversations/$_conversationId/messages'),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          });
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          _messages = data.map((item) => item as Map<String, dynamic>).toList();
+        });
+      } else {
+        throw Exception('Failed to start conversation');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to fetch conversations.")),
+      );
+    }
+  }
+
+  Future<void> _sendMessageToConversation(String text, String token) async {
+    final uuid = Uuid();
+    final now = DateTime.now().toUtc().toIso8601String();
+
+    setState(() {
+      _messages.add({
+        "id": uuid.v4(), // Generates a unique UUID
+        "sender": "user",
+        "content": text,
+        "timestamp": now, // UTC ISO 8601 timestamp
+      });
+    });
+
+    final response = await http.post(
+      Uri.parse('$url/aiconversations/$_conversationId/messages'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({"content": text}),
+    );
+
+    if (response.statusCode == 200) {
+      final messageData = json.decode(response.body);
+      setState(() {
+        _messages.add({
+          "id": messageData["id"],
+          "sender": messageData["sender"],
+          "content": messageData["content"],
+          "timestamp": messageData["timestamp"],
+        });
+      });
+      _inputController.clear();
+    } else {
+      throw Exception('Failed to send message');
+    }
+  }
+
+  void _sendMessage() async {
+    final text = _inputController.text.trim();
+    if (text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter something first!")),
+      );
+      return;
+    }
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+      if (token == null) throw Exception('JWT Token not found');
+
+      if (_conversationId == null) {
+        final response = await http.post(
+          Uri.parse('$url/aiconversations/'),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({"name": text}),
+        );
+
+        if (response.statusCode == 200) {
+          final data = json.decode(response.body);
+          setState(() {
+            _conversationId = data["id"];
+            _conversations.add({
+              "id": data["id"],
+              "name": data["name"],
+              "created_at": data["created_at"]
+            });
+          });
+        } else {
+          throw Exception('Failed to start conversation');
+        }
+      }
+
+      await _sendMessageToConversation(text, token);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to send message.")),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _inputController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildMessageBubble(Map<String, dynamic> message) {
+    bool isUser = message['sender'] == 'user';
+    return Align(
+      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        constraints: const BoxConstraints(maxWidth: 280),
+        decoration: BoxDecoration(
+          color: isUser ? const Color(0xFFEC7D1C) : Colors.grey[300],
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          message['content'],
+          style: TextStyle(
+            color: isUser ? Colors.white : Colors.black87,
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+      drawer: Drawer(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+          children: [
+            Text('Conversations', style: AppTextStyles.title),
+            GestureDetector(
+              onTap: (){
+               setState(() {
+                  _conversationId =null;
+                  _messages = [];
+                 
+               });
+              },
+              child: Text('New Conversation')),
+            SizedBox(height: 16),
+            ..._conversations.map((conv) {
+              return ListTile(
+                title: Text(conv['name']),
+                onTap: () {
+                  setState(() {
+                    _conversationId = conv['id'];
+                    _fetchMessages();
+                  });
+                },
+              );
+            }),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
             Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              margin: const EdgeInsets.only(top: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
-                  // Container(
-                  //   width: 48,
-                  //   height: 48,
-                  //   decoration: BoxDecoration(
-                  //     shape: BoxShape.circle,
-                  //     border: Border.all(color: AppColors.primary),
-                  //   ),
-                  //   child: IconButton(
-                  //     icon: const Icon(Icons.chevron_left),
-                  //     color: AppColors.primary,
-                  //     onPressed: () => Navigator.pop(context),
-                  //   ),
-                  // ),
-                  const SizedBox(width: 12),
+                  Builder(
+                    builder: (context) => IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   const Expanded(
                     child:
                         Text('AI Therapist Chat', style: AppTextStyles.title),
                   ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF7D944D),
-                      borderRadius: BorderRadius.circular(32),
-                    ),
-                    child:
-                        const Text('Network OK', style: AppTextStyles.button),
-                  ),
                 ],
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 40),
-                      const Text(
-                        "How would you like to\n interact with the AI?",
-                        style: AppTextStyles.question,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 28),
-                      ...List.generate(interactionModes.length, (index) {
-                        return InteractionOption(
-                          label: interactionModes[index]['label']!,
-                          imagePath: interactionModes[index]['image']!,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ChatPage()),
-                            );
-                          },
-                        );
-                      }),
-                    ],
+
+            // Messages
+            _conversationId == null
+                ? const Text(
+                    "How would you like to\n interact with the AI?",
+                    style: AppTextStyles.question,
+                    textAlign: TextAlign.center,
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      itemCount: _messages.length,
+                      itemBuilder: (context, index) {
+                        return _buildMessageBubble(_messages[index]);
+                      },
+                    ),
                   ),
-                ),
+
+            // Input field
+            Container(
+              color: Colors.transparent,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _inputController,
+                      decoration: InputDecoration(
+                        hintText: "Type your message...",
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        fillColor: Colors.grey[100],
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: _sendMessage,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFEC7D1C),
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(14),
+                    ),
+                    child: const Icon(Icons.send, color: Colors.white),
+                  )
+                ],
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class InteractionOption extends StatelessWidget {
-  final String label;
-  final String imagePath;
-
-  final VoidCallback onTap;
-
-  const InteractionOption({
-    super.key,
-    required this.label,
-    required this.imagePath,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 28.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: double.infinity,
-          height: 110,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.black,
-              width: 2.0,
-            ),
-            borderRadius: BorderRadius.circular(32),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  label,
-                  style: const TextStyle(
-                    color: Color(0xFF3F3B35),
-                    fontSize: 16,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(32),
-                child: SvgPicture.asset(
-                  imagePath,
-                  width: 150,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

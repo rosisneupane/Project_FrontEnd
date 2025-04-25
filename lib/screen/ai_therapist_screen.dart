@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:new_ui/config.dart';
+import 'package:new_ui/widgets/conversation_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/colors.dart';
 import '../theme/text_styles.dart';
@@ -78,6 +79,7 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
       } else {
         throw Exception('Failed to start conversation');
       }
+      _scrollToBottom();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Failed to fetch conversations.")),
@@ -97,7 +99,7 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
         "timestamp": now, // UTC ISO 8601 timestamp
       });
     });
-
+_scrollToBottom();
     final response = await http.post(
       Uri.parse('$url/aiconversations/$_conversationId/messages'),
       headers: {
@@ -118,6 +120,7 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
         });
       });
       _inputController.clear();
+      _scrollToBottom();
     } else {
       throw Exception('Failed to send message');
     }
@@ -170,6 +173,19 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
     }
   }
 
+  void _scrollToBottom() {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  });
+}
+
+
   @override
   void dispose() {
     _inputController.dispose();
@@ -203,57 +219,23 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      drawer: Drawer(
-        child: Column(
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-              ),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  'Conversations',
-                  style: AppTextStyles.title.copyWith(color: Colors.white),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.add),
-                    title: Text('New Conversation'),
-                    onTap: () {
-                      setState(() {
-                        _conversationId = null;
-                        _messages = [];
-                      });
-                      Navigator.of(context).pop(); // Optional: Close drawer
-                    },
-                  ),
-                  const Divider(),
-                  ..._conversations.map((conv) {
-                    return ListTile(
-                      leading: Icon(Icons.chat_bubble_outline),
-                      title: Text(conv['name']),
-                      selected: _conversationId == conv['id'],
-                      selectedTileColor: Theme.of(context).primaryColorLight,
-                      onTap: () {
-                        setState(() {
-                          _conversationId = conv['id'];
-                          _fetchMessages();
-                        });
-                        Navigator.of(context).pop(); // Optional: Close drawer
-                      },
-                    );
-                  }),
-                ],
-              ),
-            ),
-          ],
-        ),
+      drawer: ConversationDrawer(
+        conversationId: _conversationId,
+        conversations: _conversations,
+        onNewConversationTap: () {
+          setState(() {
+            _conversationId = null;
+            _messages = [];
+          });
+          Navigator.of(context).pop(); // Optional: Close drawer
+        },
+        onConversationTap: (id) {
+          setState(() {
+            _conversationId = id;
+            _fetchMessages();
+          });
+          Navigator.of(context).pop(); // Optional: Close drawer
+        },
       ),
       body: SafeArea(
         child: Column(

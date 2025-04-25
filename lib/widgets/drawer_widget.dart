@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_ui/screen/quiz_screen.dart';
 import 'package:new_ui/screen/signin_screen.dart';
 import 'package:new_ui/theme/colors.dart';
 import 'package:new_ui/user_services.dart';
@@ -49,12 +50,25 @@ class DrawerWidget extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text('Quiz'),
             onTap: () {
-              Navigator.pop(context); // close drawer
-              // Navigate to settings
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const QuizPage()),
+              );
             },
           ),
+          // ListTile(
+          //   leading: Icon(Icons.settings),
+          //   title: Text('Settings'),
+          //   onTap: () {
+          //                                          Navigator.push(
+          //                   context,
+          //                   MaterialPageRoute(
+          //                       builder: (context) => const ProfessionalScreen()),
+          //                 );
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('Logout'),

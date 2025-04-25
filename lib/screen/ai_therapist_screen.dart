@@ -204,31 +204,54 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       drawer: Drawer(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+        child: Column(
           children: [
-            Text('Conversations', style: AppTextStyles.title),
-            GestureDetector(
-              onTap: (){
-               setState(() {
-                  _conversationId =null;
-                  _messages = [];
-                 
-               });
-              },
-              child: Text('New Conversation')),
-            SizedBox(height: 16),
-            ..._conversations.map((conv) {
-              return ListTile(
-                title: Text(conv['name']),
-                onTap: () {
-                  setState(() {
-                    _conversationId = conv['id'];
-                    _fetchMessages();
-                  });
-                },
-              );
-            }),
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  'Conversations',
+                  style: AppTextStyles.title.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.add),
+                    title: Text('New Conversation'),
+                    onTap: () {
+                      setState(() {
+                        _conversationId = null;
+                        _messages = [];
+                      });
+                      Navigator.of(context).pop(); // Optional: Close drawer
+                    },
+                  ),
+                  const Divider(),
+                  ..._conversations.map((conv) {
+                    return ListTile(
+                      leading: Icon(Icons.chat_bubble_outline),
+                      title: Text(conv['name']),
+                      selected: _conversationId == conv['id'],
+                      selectedTileColor: Theme.of(context).primaryColorLight,
+                      onTap: () {
+                        setState(() {
+                          _conversationId = conv['id'];
+                          _fetchMessages();
+                        });
+                        Navigator.of(context).pop(); // Optional: Close drawer
+                      },
+                    );
+                  }),
+                ],
+              ),
+            ),
           ],
         ),
       ),

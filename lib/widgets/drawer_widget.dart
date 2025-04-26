@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:new_ui/screen/job_interview_roleplay_screen.dart';
 import 'package:new_ui/screen/quiz_screen.dart';
 import 'package:new_ui/screen/signin_screen.dart';
+import 'package:new_ui/screen/social_scenario_screen.dart';
 import 'package:new_ui/theme/colors.dart';
 import 'package:new_ui/user_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,6 +57,28 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const QuizPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Social Scenario'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SocialScenarioPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Job Interview Roleplay'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const JobInterviewRoleplayScreen()),
               );
             },
           ),

@@ -47,7 +47,7 @@ Future<void> _submitSchedule() async {
     "time": formattedTime, // e.g. "10:57:09.980Z"
     "text": _textController.text.trim(),
     "status": _status,
-  };
+  }; 
 
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();

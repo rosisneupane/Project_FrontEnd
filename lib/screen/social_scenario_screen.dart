@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_ui/services/user_score_service.dart';
 import 'package:new_ui/user_services.dart';
 
 class SocialScenarioPage extends StatefulWidget {
@@ -165,6 +166,11 @@ class _SocialScenarioPageState extends State<SocialScenarioPage> {
   void _selectOption(int index) {
     setState(() {
       _selectedOptionIndex = index;
+
+            // If it's the last question, call _onFinished
+      if (_currentQuestionIndex == _questions.length - 1) {
+        UserScoreService.updateUserScore(UserService().user!.score + 100);
+      }
     });
   }
 

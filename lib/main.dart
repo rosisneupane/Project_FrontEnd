@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
           );
         } else {
           // Token invalid or error
-          Navigator.pushReplacement(
+          Navigator.pushReplacement( 
             context,
             MaterialPageRoute(builder: (context) => const SignIn()),
           );

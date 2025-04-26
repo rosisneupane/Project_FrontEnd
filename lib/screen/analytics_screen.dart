@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'package:new_ui/config.dart';
+import 'package:new_ui/user_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/colors.dart';
@@ -185,6 +186,18 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             ),
                           ),
                           const SizedBox(height: 28),
+                          Text(
+                            'Your score is ${UserService().user!.score}',
+                            style: TextStyle(
+                              color: Color(0xFF4E3321),
+                              fontSize: 30,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w800,
+                              height: 1.27,
+                              letterSpacing: -0.30,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
                           const Text(
                             'Weekly Report',
                             style: TextStyle(

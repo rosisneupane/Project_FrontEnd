@@ -47,6 +47,14 @@ class DrawerWidget extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                //                 Text(
+                //   'Your score is ${user.user!.score}',
+                //   style: TextStyle(
+                //     color: Colors.white,
+                //     fontSize: 18,
+                //     fontWeight: FontWeight.w600,
+                //   ),
+                // ),
               ],
             ),
           ),

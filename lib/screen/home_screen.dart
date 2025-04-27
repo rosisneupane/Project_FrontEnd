@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:new_ui/config.dart';
 import 'package:new_ui/model/schedule.dart';
+import 'package:new_ui/screen/ai_therapist_screen.dart';
 import 'package:new_ui/screen/createschedule_screen.dart';
 import 'package:new_ui/screen/job_interview_roleplay_screen.dart';
+import 'package:new_ui/screen/resources_screen.dart';
 import 'package:new_ui/screen/social_scenario_screen.dart';
+import 'package:new_ui/screen/stop_watch_timer_screen.dart';
 import 'package:new_ui/widgets/drawer_widget.dart';
 import 'package:new_ui/widgets/home_top_bar.dart';
 import 'package:new_ui/widgets/mood_selector.dart';
@@ -115,8 +118,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisSpacing: 16,
                         crossAxisSpacing: 16,
                         children: [
-                          FeatureContainer(
-                              icon: Icons.school, label: 'Education'),
+                          GestureDetector(
+                                                        onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const StopwatchTimerScreen()),
+                              );
+                            },
+                            child: FeatureContainer(
+                                icon: Icons.school, label: 'Education'),
+                          ),
                           GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -150,11 +163,31 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: FeatureContainer(
                                   icon: Icons.spa, label: 'Self Care')),
-                          FeatureContainer(
-                              icon: Icons.sports_esports, label: 'Leisure'),
-                          FeatureContainer(
-                              icon: Icons.chat_bubble_outline,
-                              label: 'EaseTalk'),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ResourcesScreen()),
+                              );
+                            },
+                            child: FeatureContainer(
+                                icon: Icons.sports_esports, label: 'Leisure'),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AiTherapistScreen()),
+                              );
+                            },
+                            child: FeatureContainer(
+                                icon: Icons.chat_bubble_outline,
+                                label: 'EaseTalk'),
+                          ),
                         ],
                       ),
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'package:new_ui/config.dart';
+import 'package:new_ui/helper/analytics.dart';
 import 'package:new_ui/user_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -125,6 +126,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     }
   }
 
+
+
   @override
   void initState() {
     super.initState();
@@ -133,6 +136,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final int score = UserService().user?.score ?? 0;
+    final double progressValue = getProgressValue(score);
+    const double progressBarHeight = 20; // you can tweak this
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -147,12 +153,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     margin: const EdgeInsets.only(top: 16),
                     child: Row(
                       children: [
-                        // IconButton(
-                        //   icon: const Icon(Icons.chevron_left),
-                        //   color: AppColors.primary,
-                        //   onPressed: () => Navigator.pop(context),
-                        // ),
-                        // const SizedBox(width: 12),
                         const Expanded(
                           child: Text('Analytics', style: AppTextStyles.title),
                         ),
@@ -186,27 +186,90 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             ),
                           ),
                           const SizedBox(height: 28),
-                          Text(
-                            'Your score is ${UserService().user!.score}',
-                            style: TextStyle(
-                              color: Color(0xFF4E3321),
-                              fontSize: 30,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w800,
-                              height: 1.27,
-                              letterSpacing: -0.30,
+                          Center(
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 16),
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: AssetImage(getBadgeImage(score)),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 8),
+                          // Row: Previous badge, ProgressBar, Next badge
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Previous Badge
+                              Image.asset(
+                                getPreviousBadgeImage(score),
+                                height: progressBarHeight,
+                                width: progressBarHeight,
+                                fit: BoxFit.cover,
+                              ),
+                              const SizedBox(width: 8),
+
+                              // Progress Bar
+                              Expanded(
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      height: progressBarHeight,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    FractionallySizedBox(
+                                      alignment: Alignment.centerLeft,
+                                      widthFactor: progressValue,
+                                      child: Container(
+                                        height: progressBarHeight,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        '$score',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              const SizedBox(width: 8),
+
+                              // Next Badge
+                              Image.asset(
+                                getNextBadgeImage(score),
+                                height: progressBarHeight,
+                                width: progressBarHeight,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 28),
+
                           const Text(
                             'Weekly Report',
                             style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
                               color: Color(0xFF4E3321),
-                              fontSize: 30,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w800,
-                              height: 1.27,
-                              letterSpacing: -0.30,
                             ),
                           ),
                           const SizedBox(height: 8),

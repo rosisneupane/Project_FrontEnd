@@ -9,6 +9,7 @@ import 'package:new_ui/screen/forumentry_screen.dart';
 import 'package:new_ui/screen/job_interview_roleplay_screen.dart';
 import 'package:new_ui/screen/menu_screen.dart';
 import 'package:new_ui/screen/resource_file_screen.dart';
+import 'package:new_ui/screen/resource_video_screen.dart';
 import 'package:new_ui/screen/resources_screen.dart';
 import 'package:new_ui/screen/social_scenario_screen.dart';
 import 'package:new_ui/screen/stop_watch_timer_screen.dart';
@@ -59,6 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
         MenuItem(
             title: 'Resource Files',
             screen: ResourceFilesScreen(
+              type: "education",
+            )),
+                MenuItem(
+            title: 'Resource Video',
+            screen: ResourceVideoScreen(
               type: "education",
             )),
       ],

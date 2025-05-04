@@ -12,7 +12,7 @@ class FullScreenVideoPlayer extends StatelessWidget {
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Stack(
-          children: [
+          children: [ 
             Center(
               child: AspectRatio(
                 aspectRatio: controller.value.aspectRatio,

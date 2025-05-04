@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
       try {
         final response = await http.get(
           Uri.parse('$url/user/me'), // change to your endpoint
-          headers: {
+          headers: { 
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },

@@ -22,23 +22,27 @@ class _QuizPageState extends State<QuizPage> {
   ];
 
   final Map<int, int> _answers = {};
+  final List<String> _scaleLabels = ['Never', 'Rarely', 'Sometimes', 'Often', 'Always'];
+  int _currentQuestionIndex = 0;
 
-  final List<String> _scaleLabels = [
-    'Never',
-    'Rarely',
-    'Sometimes',
-    'Often',
-    'Always'
-  ];
-
-  void _submitQuiz() {
-    if (_answers.length < _questions.length) {
+  void _nextQuestion() {
+    if (_answers[_currentQuestionIndex] == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please answer all questions.')),
+        const SnackBar(content: Text('Please select an answer before proceeding.')),
       );
       return;
     }
 
+    if (_currentQuestionIndex < _questions.length - 1) {
+      setState(() {
+        _currentQuestionIndex++;
+      });
+    } else {
+      _submitQuiz();
+    }
+  }
+
+  void _submitQuiz() {
     int totalScore = _answers.values.fold(0, (sum, val) => sum + val);
     _showResultDialog(totalScore);
   }
@@ -58,8 +62,7 @@ class _QuizPageState extends State<QuizPage> {
       suggestion = 'Consider using our guided therapy tools and check-ins.';
     } else {
       insight = 'High distress likely.';
-      suggestion =
-          'We recommend speaking to a therapist and reviewing crisis resources.';
+      suggestion = 'We recommend speaking to a therapist and reviewing crisis resources.';
     }
 
     showDialog(
@@ -70,8 +73,7 @@ class _QuizPageState extends State<QuizPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Score: $score / 40',
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text('Score: $score / 40', style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Text(insight, style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 8),
@@ -80,8 +82,14 @@ class _QuizPageState extends State<QuizPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              setState(() {
+                _currentQuestionIndex = 0;
+                _answers.clear();
+              });
+            },
+            child: const Text('Restart'),
           ),
         ],
       ),
@@ -90,60 +98,47 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    final question = _questions[_currentQuestionIndex];
+
     return Scaffold(
       appBar: AppBar(title: const Text('Emotional Wellness Quiz')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: _questions.length,
-          itemBuilder: (context, index) {
-            return Card(
-              margin: const EdgeInsets.only(bottom: 16),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Q${index + 1}. ${_questions[index]}',
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(5, (i) {
-                        return Expanded(
-                          child: Column(
-                            children: [
-                              Radio<int>(
-                                value: i,
-                                groupValue: _answers[index],
-                                onChanged: (val) {
-                                  setState(() {
-                                    _answers[index] = val!;
-                                  });
-                                },
-                              ),
-                              Text(_scaleLabels[i],
-                                  style: const TextStyle(fontSize: 12)),
-                            ],
-                          ),
-                        );
-                      }),
-                    ),
-                  ],
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Q${_currentQuestionIndex + 1}. $question',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-              ),
-            );
-          },
+                const SizedBox(height: 24),
+                ...List.generate(5, (i) {
+                  return RadioListTile<int>(
+                    value: i,
+                    groupValue: _answers[_currentQuestionIndex],
+                    onChanged: (val) {
+                      setState(() {
+                        _answers[_currentQuestionIndex] = val!;
+                      });
+                    },
+                    title: Text(_scaleLabels[i]),
+                  );
+                }),
+              ],
+            ),
+          ),
         ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: _submitQuiz,
-          child: const Text('Submit'),
+          onPressed: _nextQuestion,
+          child: Text(
+            _currentQuestionIndex == _questions.length - 1 ? 'Submit' : 'Next',
+          ),
         ),
       ),
     );

@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:new_ui/config.dart';
 import 'package:new_ui/model/schedule.dart';
 import 'package:new_ui/screen/ai_therapist_screen.dart';
+import 'package:new_ui/screen/analytics_screen.dart';
 import 'package:new_ui/screen/createschedule_screen.dart';
+import 'package:new_ui/screen/forumentry_screen.dart';
 import 'package:new_ui/screen/job_interview_roleplay_screen.dart';
+import 'package:new_ui/screen/menu_screen.dart';
+import 'package:new_ui/screen/resource_file_screen.dart';
 import 'package:new_ui/screen/resources_screen.dart';
 import 'package:new_ui/screen/social_scenario_screen.dart';
 import 'package:new_ui/screen/stop_watch_timer_screen.dart';
@@ -16,6 +20,19 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/colors.dart';
 import '../theme/text_styles.dart';
+
+class FeatureItem {
+  final IconData icon;
+  final String label;
+  final Widget screen;
+  final List<MenuItem> menuItems;
+
+  FeatureItem(
+      {required this.icon,
+      required this.label,
+      required this.screen,
+      required this.menuItems});
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,6 +46,85 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<ScheduleItem> scheduleData = [];
   bool isLoading = true;
+
+  final List<FeatureItem> features = [
+    FeatureItem(
+      icon: Icons.school,
+      label: 'Education',
+      screen: const StopwatchTimerScreen(),
+      menuItems: [
+        MenuItem(title: 'Focus timer', screen: StopwatchTimerScreen()),
+        MenuItem(title: 'SMART goal setting', screen: CreateScheduleScreen()),
+        MenuItem(title: 'Visual task planner', screen: CreateScheduleScreen()),
+        MenuItem(
+            title: 'Resource Files',
+            screen: ResourceFilesScreen(
+              type: "education",
+            )),
+      ],
+    ),
+    FeatureItem(
+      icon: Icons.work,
+      label: 'Work',
+      screen: const JobInterviewRoleplayScreen(),
+      menuItems: [
+        MenuItem(
+            title: 'Career exploration quiz',
+            screen: JobInterviewRoleplayScreen()),
+        MenuItem(
+            title: 'Job interview role-play tool',
+            screen: JobInterviewRoleplayScreen()),
+      ],
+    ),
+    FeatureItem(
+      icon: Icons.group,
+      label: 'Social',
+      screen: const SocialScenarioPage(),
+      menuItems: [
+        MenuItem(
+            title: 'Social role-play scenarios', screen: SocialScenarioPage()),
+        MenuItem(title: 'Safe chat space', screen: ForumEntryScreen()),
+        MenuItem(
+            title: 'Badge system for social interactions',
+            screen: SocialScenarioPage()),
+      ],
+    ),
+    FeatureItem(
+      icon: Icons.spa,
+      label: 'Self Care',
+      screen: const CreateScheduleScreen(),
+      menuItems: [
+        MenuItem(
+            title: 'Customizable morning/evening routine builder',
+            screen: CreateScheduleScreen()),
+        MenuItem(title: 'Grounding exercises', screen: StopwatchTimerScreen()),
+        MenuItem(
+            title: 'Hydration, sleep, and nutrition trackers',
+            screen: StopwatchTimerScreen()),
+      ],
+    ),
+    FeatureItem(
+      icon: Icons.sports_esports,
+      label: 'Leisure',
+      screen: const ResourcesScreen(),
+      menuItems: [
+        MenuItem(
+            title: 'Yoga and mindfulness routines', screen: ResourcesScreen()),
+        MenuItem(title: 'Gamified rewards', screen: StopwatchTimerScreen()),
+        MenuItem(
+            title: 'Cross-Functional Achievement badges',
+            screen: AnalyticsScreen()),
+      ],
+    ),
+    FeatureItem(
+      icon: Icons.chat_bubble_outline,
+      label: 'EaseTalk',
+      screen: const AiTherapistScreen(),
+      menuItems: [
+        MenuItem(title: 'Talk To AI', screen: AiTherapistScreen()),
+      ],
+    ),
+  ];
 
   @override
   void initState() {
@@ -110,85 +206,37 @@ class _HomeScreenState extends State<HomeScreen> {
                       const MoodSelectorCard(),
                       const SizedBox(height: 28),
 
-// Grid of Categories
-                      GridView.count(
-                        crossAxisCount: 2,
+                      // Grid of Categories
+                      GridView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        children: [
-                          GestureDetector(
-                                                        onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const StopwatchTimerScreen()),
-                              );
-                            },
-                            child: FeatureContainer(
-                                icon: Icons.school, label: 'Education'),
-                          ),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const JobInterviewRoleplayScreen()),
-                                );
-                              },
-                              child: FeatureContainer(
-                                  icon: Icons.work, label: 'Work')),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SocialScenarioPage()),
-                                );
-                              },
-                              child: FeatureContainer(
-                                  icon: Icons.group, label: 'Social')),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const CreateScheduleScreen()),
-                                );
-                              },
-                              child: FeatureContainer(
-                                  icon: Icons.spa, label: 'Self Care')),
-                          GestureDetector(
+                        itemCount: features.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                        ),
+                        itemBuilder: (context, index) {
+                          final feature = features[index];
+                          return GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ResourcesScreen()),
+                                  builder: (context) => MenuScreen(
+                                    topBarTitle: feature.label,
+                                    menuItems: feature.menuItems,
+                                  ),
+                                ),
                               );
                             },
                             child: FeatureContainer(
-                                icon: Icons.sports_esports, label: 'Leisure'),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const AiTherapistScreen()),
-                              );
-                            },
-                            child: FeatureContainer(
-                                icon: Icons.chat_bubble_outline,
-                                label: 'EaseTalk'),
-                          ),
-                        ],
+                              icon: feature.icon,
+                              label: feature.label,
+                            ),
+                          );
+                        },
                       ),
 
                       const SizedBox(height: 28),

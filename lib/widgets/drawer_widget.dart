@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_ui/screen/forumentry_screen.dart';
 import 'package:new_ui/screen/job_interview_roleplay_screen.dart';
 import 'package:new_ui/screen/quiz_screen.dart';
 import 'package:new_ui/screen/signin_screen.dart';
@@ -90,17 +91,16 @@ class DrawerWidget extends StatelessWidget {
               );
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.settings),
-          //   title: Text('Settings'),
-          //   onTap: () {
-          //                                          Navigator.push(
-          //                   context,
-          //                   MaterialPageRoute(
-          //                       builder: (context) => const ProfessionalScreen()),
-          //                 );
-          //   },
-          // ),
+          ListTile(
+            leading: Icon(Icons.social_distance),
+            title: Text('Community'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ForumEntryScreen()),
+              );
+            },
+          ),
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('Logout'),

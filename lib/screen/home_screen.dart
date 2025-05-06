@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             screen: ResourceFilesScreen(
               type: "education",
             )),
-                MenuItem(
+        MenuItem(
             title: 'Resource Video',
             screen: ResourceVideoScreen(
               type: "education",
@@ -80,6 +80,16 @@ class _HomeScreenState extends State<HomeScreen> {
         MenuItem(
             title: 'Job interview role-play tool',
             screen: JobInterviewRoleplayScreen()),
+        MenuItem(
+            title: 'Resource Files',
+            screen: ResourceFilesScreen(
+              type: "work",
+            )),
+        MenuItem(
+            title: 'Resource Video',
+            screen: ResourceVideoScreen(
+              type: "work",
+            )),
       ],
     ),
     FeatureItem(
@@ -93,6 +103,16 @@ class _HomeScreenState extends State<HomeScreen> {
         MenuItem(
             title: 'Badge system for social interactions',
             screen: SocialScenarioPage()),
+        MenuItem(
+            title: 'Resource Files',
+            screen: ResourceFilesScreen(
+              type: "social",
+            )),
+        MenuItem(
+            title: 'Resource Video',
+            screen: ResourceVideoScreen(
+              type: "social",
+            )),
       ],
     ),
     FeatureItem(
@@ -107,6 +127,16 @@ class _HomeScreenState extends State<HomeScreen> {
         MenuItem(
             title: 'Hydration, sleep, and nutrition trackers',
             screen: StopwatchTimerScreen()),
+        MenuItem(
+            title: 'Resource Files',
+            screen: ResourceFilesScreen(
+              type: "self-care",
+            )),
+        MenuItem(
+            title: 'Resource Video',
+            screen: ResourceVideoScreen(
+              type: "self-care",
+            )),
       ],
     ),
     FeatureItem(
@@ -120,6 +150,16 @@ class _HomeScreenState extends State<HomeScreen> {
         MenuItem(
             title: 'Cross-Functional Achievement badges',
             screen: AnalyticsScreen()),
+        MenuItem(
+            title: 'Resource Files',
+            screen: ResourceFilesScreen(
+              type: "leisure",
+            )),
+        MenuItem(
+            title: 'Resource Video',
+            screen: ResourceVideoScreen(
+              type: "leisure",
+            )),
       ],
     ),
     FeatureItem(

@@ -33,7 +33,7 @@ class _ResourceFilesScreenState extends State<ResourceFilesScreen> {
       throw Exception('JWT Token not found');
     }
     final response = await http.get(
-      Uri.parse("$url/media?media_type=pdf"),
+       Uri.parse("$url/media?media_type=pdf&category=${widget.type}"),
       headers: {
         'Authorization': 'Bearer $token',
       }, // adjust as needed

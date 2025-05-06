@@ -36,7 +36,7 @@ class _ResourceVideoScreenState extends State<ResourceVideoScreen> {
     }
 
     final response = await http.get(
-      Uri.parse("$url/media?media_type=video"),
+      Uri.parse("$url/media?media_type=video&category=${widget.type}"),
       headers: {
         'Authorization': 'Bearer $token',
       },

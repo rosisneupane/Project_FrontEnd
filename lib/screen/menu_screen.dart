@@ -4,8 +4,9 @@ import 'package:new_ui/theme/colors.dart';
 class MenuItem {
   final String title;
   final Widget screen;
+  final IconData icon;
 
-  MenuItem({required this.title, required this.screen});
+  MenuItem({required this.title, required this.screen, required this.icon});
 }
 
 
@@ -43,7 +44,7 @@ class MenuScreen extends StatelessWidget {
               );
             },
             child: FeatureContainer(
-              icon: Icons.arrow_forward_ios, // Default icon
+              icon: item.icon, // Default icon
               label: item.title,
             ),
           );

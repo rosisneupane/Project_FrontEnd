@@ -9,7 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
 class AiTherapistScreen extends StatefulWidget {
-  const AiTherapistScreen({super.key});
+  final bool? showBack;
+  const AiTherapistScreen({super.key, this.showBack});
 
   @override
   State<AiTherapistScreen> createState() => _AiTherapistScreenState();
@@ -99,7 +100,7 @@ class _AiTherapistScreenState extends State<AiTherapistScreen> {
         "timestamp": now, // UTC ISO 8601 timestamp
       });
     });
-_scrollToBottom();
+    _scrollToBottom();
     final response = await http.post(
       Uri.parse('$url/aiconversations/$_conversationId/messages'),
       headers: {
@@ -174,17 +175,16 @@ _scrollToBottom();
   }
 
   void _scrollToBottom() {
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
-  });
-}
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -219,6 +219,30 @@ _scrollToBottom();
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: AppBar(
+        leading: widget.showBack != null
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            : null,
+        title: const Text('AI Therapist Chat', style: AppTextStyles.title),
+        backgroundColor: AppColors.background,
+        elevation: 0,
+actions: [
+  Builder(
+    builder: (context) => IconButton(
+      onPressed: () {
+        Scaffold.of(context).openDrawer();
+      },
+      icon: const Icon(Icons.menu),
+    ),
+  ),
+],
+
+      ),
       drawer: ConversationDrawer(
         conversationId: _conversationId,
         conversations: _conversations,
@@ -240,25 +264,6 @@ _scrollToBottom();
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  Builder(
-                    builder: (context) => IconButton(
-                      icon: const Icon(Icons.menu),
-                      onPressed: () => Scaffold.of(context).openDrawer(),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Expanded(
-                    child:
-                        Text('AI Therapist Chat', style: AppTextStyles.title),
-                  ),
-                ],
-              ),
-            ),
-
             // Messages
             _conversationId == null
                 ? const Text(

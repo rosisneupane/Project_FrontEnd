@@ -23,7 +23,8 @@ class DayWithMood {
 }
 
 class AnalyticsScreen extends StatefulWidget {
-  const AnalyticsScreen({super.key});
+  final bool? showBack;
+  const AnalyticsScreen({super.key, this.showBack});
 
   @override
   State<AnalyticsScreen> createState() => _AnalyticsScreenState();
@@ -126,8 +127,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     }
   }
 
-
-
   @override
   void initState() {
     super.initState();
@@ -141,35 +140,24 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     const double progressBarHeight = 20; // you can tweak this
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: AppBar(
+        leading: widget.showBack != null
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            : null,
+        title: const Text('Analytics', style: AppTextStyles.title),
+        backgroundColor: AppColors.background,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
-                  // Top Bar
-                  Container(
-                    height: 48,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    margin: const EdgeInsets.only(top: 16),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Text('Analytics', style: AppTextStyles.title),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFF936C),
-                            borderRadius: BorderRadius.circular(32),
-                          ),
-                          child: Text(getMoodCategory(),
-                              style: AppTextStyles.button),
-                        ),
-                      ],
-                    ),
-                  ),
-
                   // Main Content
                   Expanded(
                     child: SingleChildScrollView(

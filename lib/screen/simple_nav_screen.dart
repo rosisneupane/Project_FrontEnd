@@ -24,7 +24,7 @@ class _SimpleBottomNavState extends State<SimpleBottomNav> {
   ];
 
   final List<Widget> _pages = [
-    HomeScreen(),
+    HomeScreen(), 
     AnalyticsScreen(),
     AiTherapistScreen(),
     ResourcesScreen(),

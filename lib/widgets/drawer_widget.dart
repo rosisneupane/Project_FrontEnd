@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_ui/screen/event_screen.dart';
 import 'package:new_ui/screen/forumentry_screen.dart';
 import 'package:new_ui/screen/job_interview_roleplay_screen.dart';
 import 'package:new_ui/screen/quiz_screen.dart';
@@ -98,6 +99,16 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ForumEntryScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.event),
+            title: Text('Events'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EventListPage()),
               );
             },
           ),

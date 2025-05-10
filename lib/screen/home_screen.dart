@@ -6,6 +6,7 @@ import 'package:new_ui/screen/ai_therapist_screen.dart';
 import 'package:new_ui/screen/analytics_screen.dart';
 import 'package:new_ui/screen/createschedule_screen.dart';
 import 'package:new_ui/screen/forumentry_screen.dart';
+import 'package:new_ui/screen/hydration_tracker_screen.dart';
 import 'package:new_ui/screen/job_interview_roleplay_screen.dart';
 import 'package:new_ui/screen/menu_screen.dart';
 import 'package:new_ui/screen/resource_file_screen.dart';
@@ -25,14 +26,11 @@ import '../theme/text_styles.dart';
 class FeatureItem {
   final IconData icon;
   final String label;
-  final Widget screen;
+
   final List<MenuItem> menuItems;
 
   FeatureItem(
-      {required this.icon,
-      required this.label,
-      required this.screen,
-      required this.menuItems});
+      {required this.icon, required this.label, required this.menuItems});
 }
 
 class HomeScreen extends StatefulWidget {
@@ -52,122 +50,137 @@ class _HomeScreenState extends State<HomeScreen> {
     FeatureItem(
       icon: Icons.school,
       label: 'Education',
-      screen: const StopwatchTimerScreen(),
       menuItems: [
-        MenuItem(title: 'Focus timer', screen: StopwatchTimerScreen()),
-        MenuItem(title: 'SMART goal setting', screen: CreateScheduleScreen()),
-        MenuItem(title: 'Visual task planner', screen: CreateScheduleScreen()),
+        MenuItem(
+            title: 'Focus timer',
+            screen: CountdownTimerScreen(),
+            icon: Icons.timer),
+        MenuItem(
+            title: 'SMART goal setting',
+            screen: CreateScheduleScreen(),
+            icon: Icons.flag),
+        MenuItem(
+            title: 'Visual task planner',
+            screen: CreateScheduleScreen(),
+            icon: Icons.view_agenda),
         MenuItem(
             title: 'Resource Files',
-            screen: ResourceFilesScreen(
-              type: "education",
-            )),
+            screen: ResourceFilesScreen(type: "education"),
+            icon: Icons.insert_drive_file),
         MenuItem(
             title: 'Resource Video',
-            screen: ResourceVideoScreen(
-              type: "education",
-            )),
+            screen: ResourceVideoScreen(type: "education"),
+            icon: Icons.video_library),
       ],
     ),
     FeatureItem(
       icon: Icons.work,
       label: 'Work',
-      screen: const JobInterviewRoleplayScreen(),
       menuItems: [
         MenuItem(
             title: 'Career exploration quiz',
-            screen: JobInterviewRoleplayScreen()),
+            screen: JobInterviewRoleplayScreen(),
+            icon: Icons.quiz),
         MenuItem(
             title: 'Job interview role-play tool',
-            screen: JobInterviewRoleplayScreen()),
+            screen: JobInterviewRoleplayScreen(),
+            icon: Icons.mic),
         MenuItem(
             title: 'Resource Files',
-            screen: ResourceFilesScreen(
-              type: "work",
-            )),
+            screen: ResourceFilesScreen(type: "work"),
+            icon: Icons.insert_drive_file),
         MenuItem(
             title: 'Resource Video',
-            screen: ResourceVideoScreen(
-              type: "work",
-            )),
+            screen: ResourceVideoScreen(type: "work"),
+            icon: Icons.video_library),
       ],
     ),
     FeatureItem(
       icon: Icons.group,
       label: 'Social',
-      screen: const SocialScenarioPage(),
       menuItems: [
         MenuItem(
-            title: 'Social role-play scenarios', screen: SocialScenarioPage()),
-        MenuItem(title: 'Safe chat space', screen: ForumEntryScreen()),
+            title: 'Social role-play scenarios',
+            screen: SocialScenarioPage(),
+            icon: Icons.record_voice_over),
+        MenuItem(
+            title: 'Safe chat space',
+            screen: ForumEntryScreen(),
+            icon: Icons.forum),
         MenuItem(
             title: 'Badge system for social interactions',
-            screen: SocialScenarioPage()),
+            screen: SocialScenarioPage(),
+            icon: Icons.emoji_events),
         MenuItem(
             title: 'Resource Files',
-            screen: ResourceFilesScreen(
-              type: "social",
-            )),
+            screen: ResourceFilesScreen(type: "social"),
+            icon: Icons.insert_drive_file),
         MenuItem(
             title: 'Resource Video',
-            screen: ResourceVideoScreen(
-              type: "social",
-            )),
+            screen: ResourceVideoScreen(type: "social"),
+            icon: Icons.video_library),
       ],
     ),
     FeatureItem(
       icon: Icons.spa,
       label: 'Self Care',
-      screen: const CreateScheduleScreen(),
       menuItems: [
         MenuItem(
             title: 'Customizable morning/evening routine builder',
-            screen: CreateScheduleScreen()),
-        MenuItem(title: 'Grounding exercises', screen: StopwatchTimerScreen()),
+            screen: CreateScheduleScreen(),
+            icon: Icons.wb_twilight),
         MenuItem(
-            title: 'Hydration, sleep, and nutrition trackers',
-            screen: StopwatchTimerScreen()),
+            title: 'Grounding exercises',
+            screen: CountdownTimerScreen(),
+            icon: Icons.self_improvement),
+        MenuItem(
+            title: 'Hydration trackers',
+            screen: HydrationTrackerScreen(),
+            icon: Icons.local_drink),
         MenuItem(
             title: 'Resource Files',
-            screen: ResourceFilesScreen(
-              type: "self-care",
-            )),
+            screen: ResourceFilesScreen(type: "self-care"),
+            icon: Icons.insert_drive_file),
         MenuItem(
             title: 'Resource Video',
-            screen: ResourceVideoScreen(
-              type: "self-care",
-            )),
+            screen: ResourceVideoScreen(type: "self-care"),
+            icon: Icons.video_library),
       ],
     ),
     FeatureItem(
       icon: Icons.sports_esports,
       label: 'Leisure',
-      screen: const ResourcesScreen(),
       menuItems: [
         MenuItem(
-            title: 'Yoga and mindfulness routines', screen: ResourcesScreen()),
-        MenuItem(title: 'Gamified rewards', screen: StopwatchTimerScreen()),
+            title: 'Yoga and mindfulness routines',
+            screen: ResourcesScreen(),
+            icon: Icons.self_improvement),
+        MenuItem(
+            title: 'Gamified rewards',
+            screen: AnalyticsScreen(showBack: true,),
+            icon: Icons.stars),
         MenuItem(
             title: 'Cross-Functional Achievement badges',
-            screen: AnalyticsScreen()),
+            screen: AnalyticsScreen(showBack: true,),
+            icon: Icons.military_tech),
         MenuItem(
             title: 'Resource Files',
-            screen: ResourceFilesScreen(
-              type: "leisure",
-            )),
+            screen: ResourceFilesScreen(type: "leisure"),
+            icon: Icons.insert_drive_file),
         MenuItem(
             title: 'Resource Video',
-            screen: ResourceVideoScreen(
-              type: "leisure",
-            )),
+            screen: ResourceVideoScreen(type: "leisure"),
+            icon: Icons.video_library),
       ],
     ),
     FeatureItem(
       icon: Icons.chat_bubble_outline,
       label: 'EaseTalk',
-      screen: const AiTherapistScreen(),
       menuItems: [
-        MenuItem(title: 'Talk To AI', screen: AiTherapistScreen()),
+        MenuItem(
+            title: 'Talk To AI',
+            screen: AiTherapistScreen(showBack: true,),
+            icon: Icons.smart_toy),
       ],
     ),
   ];

@@ -119,7 +119,7 @@ class _SignInState extends State<SignIn> {
               ],
             ),
             Text(
-              'Sign In\nCUHK AI Therapist',
+              'Sign In\nTherapy Thread',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: const Color(0xFF4E3321),

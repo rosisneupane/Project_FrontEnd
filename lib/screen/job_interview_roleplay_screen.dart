@@ -182,7 +182,7 @@ class _JobInterviewRoleplayScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Social Scenarios'),
+        title: const Text('Job interview Role play'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

@@ -41,22 +41,7 @@ class ScheduleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 28.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ScheduleDetailPage(
-                id: id,
-                date: date,
-                time: time,
-                text: text,
-                status: status,
-              ),
-            ),
-          );
-        },
-        child: Container(
+      child: Container(
           width: double.infinity,
           height: 110,
           decoration: BoxDecoration(
@@ -138,7 +123,7 @@ class ScheduleCard extends StatelessWidget {
               ),
             ],
           ),
-        ),
+        
       ),
     );
   }

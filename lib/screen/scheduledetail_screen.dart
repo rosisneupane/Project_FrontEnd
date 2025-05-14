@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:new_ui/config.dart';
 import 'package:new_ui/screen/createschedule_screen.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScheduleDetailPage extends StatefulWidget {
   final String id;
@@ -8,6 +13,7 @@ class ScheduleDetailPage extends StatefulWidget {
   final String time;
   final String text;
   final bool status;
+  final void Function()? onDelete;
 
   const ScheduleDetailPage({
     super.key,
@@ -16,6 +22,7 @@ class ScheduleDetailPage extends StatefulWidget {
     required this.time,
     required this.text,
     required this.status,
+    this.onDelete,
   });
 
   @override
@@ -49,16 +56,73 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
     }
   }
 
-  void toggleStatus() {
-    setState(() {
-      currentStatus = !currentStatus;
-    });
-    // Optionally, update backend or state management
+  void toggleStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+
+    if (token == null) {
+      throw Exception('JWT Token not found');
+    }
+
+    final url = Uri.parse('${AppConfig.apiUrl}/routines/${widget.id}');
+    final updatedRoutine = {
+      "date": widget.date,
+      "time": widget.time,
+      "text": widget.text,
+      "status": !currentStatus
+    };
+
+    final response = await http.put(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(updatedRoutine),
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        currentStatus = !currentStatus;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Status updated')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to update status')),
+      );
+    }
   }
 
-  void deleteSchedule() {
-    // Logic to delete (from backend or state)
-    Navigator.pop(context);
+  void deleteSchedule() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+
+    if (token == null) {
+      throw Exception('JWT Token not found');
+    }
+    final url = Uri.parse('${AppConfig.apiUrl}/routines/${widget.id}');
+
+    final response = await http.delete(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        "Content-Type": "application/json"
+      },
+    );
+
+    if (response.statusCode == 200) {
+      widget.onDelete?.call();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Routine deleted successfully')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete routine')),
+      );
+    }
   }
 
   @override

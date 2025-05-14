@@ -54,7 +54,9 @@ class _SplashScreenState extends State<SplashScreen> {
         );
 
         if (response.statusCode == 200) {
+          
           final data = json.decode(response.body);
+          print(data);
           final user = User.fromJson(data);
           UserService().setUser(user); // Save globally
 

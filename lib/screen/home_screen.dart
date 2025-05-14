@@ -151,28 +151,28 @@ class _HomeScreenState extends State<HomeScreen> {
       icon: Icons.sports_esports,
       label: 'Leisure',
       menuItems: [
-        MenuItem(
-            title: 'Yoga and mindfulness routines',
-            screen: ResourcesScreen(),
-            icon: Icons.self_improvement),
-        MenuItem(
-            title: 'Gamified rewards',
-            screen: AnalyticsScreen(
-              showBack: true,
-            ),
-            icon: Icons.stars),
-        MenuItem(
-            title: 'Cross-Functional Achievement badges',
-            screen: AnalyticsScreen(
-              showBack: true,
-            ),
-            icon: Icons.military_tech),
+        // MenuItem(
+        //     title: 'Yoga and mindfulness routines',
+        //     screen: ResourcesScreen(),
+        //     icon: Icons.self_improvement),
+        // MenuItem(
+        //     title: 'Gamified rewards',
+        //     screen: AnalyticsScreen(
+        //       showBack: true,
+        //     ),
+        //     icon: Icons.stars),
+        // MenuItem(
+        //     title: 'Cross-Functional Achievement badges',
+        //     screen: AnalyticsScreen(
+        //       showBack: true,
+        //     ),
+        //     icon: Icons.military_tech),
         MenuItem(
             title: 'Resource Files',
             screen: ResourceFilesScreen(type: "leisure"),
             icon: Icons.insert_drive_file),
         MenuItem(
-            title: 'Resource Video',
+            title: 'Mindfullness and Yoga Routines',
             screen: ResourceVideoScreen(type: "leisure"),
             icon: Icons.video_library),
       ],

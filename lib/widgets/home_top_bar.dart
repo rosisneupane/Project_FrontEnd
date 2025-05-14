@@ -27,7 +27,17 @@ class HomeTopBar extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.primary),
               ),
-              child: Image.asset("assets/images/ProPic1.png"),
+              child: ClipOval(
+                child: user.user!.profilePicture != null
+                    ? Image.network(
+                        user.user!.profilePicture!,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        "assets/images/blank-profile.png",
+                        fit: BoxFit.cover,
+                      ),
+              ),
             ),
           ),
           const SizedBox(width: 12),

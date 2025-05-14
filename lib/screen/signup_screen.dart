@@ -65,17 +65,15 @@ class _SignUpState extends State<SignUp> {
     });
 
     try {
-      final response = await http.post(
-        Uri.parse('$url/auth/register'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'username': username,
-          'email': email,
-          'password': password,
-          'guardianEmail': guardianEmail,
-          'guardianPhone': guardianPhone,
-        })
-      );
+      final response = await http.post(Uri.parse('$url/auth/register'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'username': username,
+            'email': email,
+            'password': password,
+            'guardianEmail': guardianEmail,
+            'guardianPhone': guardianPhone,
+          }));
 
       if (!mounted) return;
 
@@ -85,11 +83,11 @@ class _SignUpState extends State<SignUp> {
               content: Text("Registration successful"),
               backgroundColor: Colors.green),
         );
-Navigator.pushReplacement(
-  context,
-  MaterialPageRoute(builder: (context) => OTPScreen(email: email)),
-);
-
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OTPScreen(email: guardianEmail)),
+        );
       } else {
         final error =
             json.decode(response.body)['message'] ?? 'Registration failed';
@@ -119,7 +117,7 @@ Navigator.pushReplacement(
       body: SingleChildScrollView(
         child: Column(
           children: [
-                       Stack(
+            Stack(
               children: [
                 ClipPath(
                   clipper: TopCurveClipper(),

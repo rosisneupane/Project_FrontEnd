@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_ui/screen/ai_therapist_screen.dart';
 import 'package:new_ui/screen/analytics_screen.dart';
+import 'package:new_ui/screen/event_screen.dart';
 import 'package:new_ui/screen/forumentry_screen.dart';
 import 'package:new_ui/screen/home_screen.dart';
 import 'package:new_ui/screen/resources_screen.dart';
@@ -16,18 +17,18 @@ class _SimpleBottomNavState extends State<SimpleBottomNav> {
   int _selectedIndex = 0; // default selected index
 
   final List<IconData> _icons = [
-    Icons.sentiment_satisfied,
-    Icons.favorite_border,
-    Icons.chat_bubble_sharp,
+    Icons.home,
+    Icons.analytics,
+    Icons.smart_toy,
     Icons.backpack,
-    Icons.flag,
+    Icons.chat_bubble_sharp,
   ];
 
   final List<Widget> _pages = [
     HomeScreen(), 
     AnalyticsScreen(),
     AiTherapistScreen(),
-    ResourcesScreen(),
+    EventListPage(),
     ForumEntryScreen(),
   ];
 

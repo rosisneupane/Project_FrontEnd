@@ -157,11 +157,15 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icons.self_improvement),
         MenuItem(
             title: 'Gamified rewards',
-            screen: AnalyticsScreen(showBack: true,),
+            screen: AnalyticsScreen(
+              showBack: true,
+            ),
             icon: Icons.stars),
         MenuItem(
             title: 'Cross-Functional Achievement badges',
-            screen: AnalyticsScreen(showBack: true,),
+            screen: AnalyticsScreen(
+              showBack: true,
+            ),
             icon: Icons.military_tech),
         MenuItem(
             title: 'Resource Files',
@@ -179,7 +183,9 @@ class _HomeScreenState extends State<HomeScreen> {
       menuItems: [
         MenuItem(
             title: 'Talk To AI',
-            screen: AiTherapistScreen(showBack: true,),
+            screen: AiTherapistScreen(
+              showBack: true,
+            ),
             icon: Icons.smart_toy),
       ],
     ),
@@ -257,13 +263,96 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const SizedBox(height: 40),
                       const Text(
-                        "CUHK AI Therapist is here with you",
+                        "Therapy Thread is here with you",
                         style: AppTextStyles.question,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 28),
+
                       const MoodSelectorCard(),
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 18),
+
+                      // Schedule Header
+                      scheduleData.isEmpty
+                          ? SizedBox()
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Schedule for the week ...',
+                                  style: TextStyle(
+                                    color: Color(0xFF4E3321),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const CreateScheduleScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Create More...',
+                                    style: TextStyle(
+                                      color: Color(0xFF736A66),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      const SizedBox(height: 20),
+
+                      // Horizontal Schedule Cards
+                      scheduleData.isEmpty
+                          ? SizedBox()
+                          : SizedBox(
+                              height: 150,
+                              child: isLoading
+                                  ? const Center(
+                                      child: CircularProgressIndicator())
+                                  : scheduleData.isEmpty
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const SizedBox(height: 10),
+                                            const Text(
+                                              "No Schedules",
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: scheduleData.length,
+                                          itemBuilder: (context, index) {
+                                            final item = scheduleData[index];
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 12.0),
+                                              child: SizedBox(
+                                                width: 300,
+                                                child: ScheduleCard(
+                                                  id: item.id,
+                                                  date: item.date,
+                                                  time: item.time,
+                                                  text: item.text,
+                                                  status: item.status,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                            ),
 
                       // Grid of Categories
                       GridView.builder(
@@ -296,85 +385,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         },
-                      ),
-
-                      const SizedBox(height: 28),
-
-                      // Schedule Header
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Schedule for the week ...',
-                            style: TextStyle(
-                              color: Color(0xFF4E3321),
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const CreateScheduleScreen(),
-                                ),
-                              );
-                            },
-                            child: const Text(
-                              'Create More...',
-                              style: TextStyle(
-                                color: Color(0xFF736A66),
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Horizontal Schedule Cards
-                      SizedBox(
-                        height: 150,
-                        child: isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : scheduleData.isEmpty
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(height: 10),
-                                      const Text(
-                                        "No Schedules",
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: scheduleData.length,
-                                    itemBuilder: (context, index) {
-                                      final item = scheduleData[index];
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 12.0),
-                                        child: SizedBox(
-                                          width: 300,
-                                          child: ScheduleCard(
-                                            id: item.id,
-                                            date: item.date,
-                                            time: item.time,
-                                            text: item.text,
-                                            status: item.status,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
                       ),
                     ],
                   ),
@@ -411,13 +421,13 @@ class FeatureContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon,
-              size: 36,
+              size: 46,
               color: AppColors.primary), // Change primary color if needed
           const SizedBox(height: 8),
           Text(
             label,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
               color: Color(0xFF4E3321),
             ),

@@ -88,7 +88,7 @@ class _VideoListItemState extends State<VideoListItem> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.networkUrl(
-      Uri.parse('$baseUrl${widget.video["url"]}'),
+      Uri.parse('${widget.video["url"]}'),
     )..initialize().then((_) {
         setState(() {});
       });

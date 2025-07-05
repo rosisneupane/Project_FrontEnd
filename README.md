@@ -32,8 +32,9 @@ This is the **Flutter frontend** for the MultiCoached application – a mental h
 ## 1️⃣ Clone the Repo
 
       ```bash
-      git clone https://github.com/rosisneupane/Project_Backend
-      cd Project_Backend
+      git clone https://github.com/rosisneupane/Project_Frontend
+
+      cd Project_FrontEnd
 
 
 ## 2️⃣ Install Dependencies

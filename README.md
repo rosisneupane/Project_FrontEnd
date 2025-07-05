@@ -29,20 +29,21 @@ This is the **Flutter frontend** for the MultiCoached application – a mental h
 
 ## 🛠️ Getting Started
 
-### 1️⃣ Clone the Repo
+## 1️⃣ Clone the Repo
 
-```bash
-git clone https://github.com/rosisneupane/Project_Backend
-cd Project_Backend
+      ```bash
+      git clone https://github.com/rosisneupane/Project_Backend
+      cd Project_Backend
 
 
-### 2️⃣ Install Dependencies
+## 2️⃣ Install Dependencies
 
       ```bash
     flutter pub get
 
-### 3️⃣ Run the App
+## 3️⃣ Run the App
 Make sure your backend server is running on localhost or deployed.
+
       ```bash
     flutter run
 
